@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">AStar</string>
+    <string name="y">Y</string>
+    <string name="x">X</string>
+    <string name="x2">X2</string>
+    <string name="y2">Y2</string>
+    <string name="add_point">Добавить вершину</string>
+    <string name="edge_item_coords">%1$s(x: %2$d; y: %3$d)</string>
+    <string name="edge_item_distance_double">dst: %1$.2f</string>
+    <string name="edge_item_distance_int">dst: %1$d</string>
+    <string name="distance">Расстояние</string>
+    <string name="find_shortest_way">Найти кратчайший путь</string>
+</resources>
