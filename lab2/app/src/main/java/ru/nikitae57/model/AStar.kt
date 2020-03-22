@@ -15,27 +15,27 @@ class AStar {
 
         fun findPath(pointFrom: GraphPoint, pointTo: GraphPoint): List<GraphPoint> {
             val path = mutableListOf<GraphPoint>()
-            val pointToIsVisited = hashMapOf<GraphPoint, Boolean>()
+            val visitedPoints = mutableSetOf<GraphPoint>()
             val heuristic = { point: GraphPoint ->
                 calculateDistance(pointFrom, point) + calculateDistance(point, pointTo)
             }
 
             var currentPoint = pointFrom
             while(currentPoint != pointTo) {
-                pointToIsVisited[currentPoint] = true
+                visitedPoints.add(currentPoint)
                 path.add(currentPoint)
 
                 currentPoint = currentPoint.neighbours.run {
                     // Best point calculated using heuristic
                     val nextPoint = filter {
-                        it !in pointToIsVisited
+                        it !in visitedPoints
                     }.minBy(heuristic) ?: throw IllegalStateException("Can't find a way. There's no not visited points")
-                    forEach { pointToIsVisited[it] = true }
+                    forEach { visitedPoints.add(it) }
 
                     nextPoint
                 }
             }
-            path.add(pointTo)
+            path.add(currentPoint)
 
             return path
         }

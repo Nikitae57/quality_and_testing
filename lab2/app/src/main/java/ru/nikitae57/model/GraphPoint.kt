@@ -17,7 +17,7 @@ data class GraphPoint(
 
     override fun equals(other: Any?): Boolean {
         return if (other is GraphPoint) {
-            name == other.name
+            x == other.x && y == other.y
         } else {
             false
         }
