@@ -3,17 +3,17 @@ package ru.nikitae57.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.NumberPicker
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.choose_points_layout.*
+import kotlinx.android.synthetic.main.enter_graph_content.*
+import kotlinx.android.synthetic.main.shortest_way_content.*
 import ru.nikitae57.R
-import ru.nikitae57.model.Edge
-import ru.nikitae57.model.GraphPoint
 import ru.nikitae57.viewmodel.graph.GraphViewModel
 import ru.nikitae57.viewmodel.graph.GraphViewModelFactory
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,31 +33,61 @@ class MainActivity : AppCompatActivity() {
         val thisActivity = this
         viewModel = ViewModelProvider(this, factory).get(GraphViewModel::class.java)
         viewModel.apply {
-            graphLiveData.observe(thisActivity, Observer { graph ->
-                graph?.let {
-                    edgesRecyclerViewAdapter = GraphEdgesAdapter(it)
-                    rvGraphPoints.adapter = edgesRecyclerViewAdapter
-                }
+            // Init recycler view adapter
+            edgesRecyclerViewAdapter = GraphEdgesAdapter(edges)
+            rvGraphPoints.adapter = edgesRecyclerViewAdapter
 
-                elementAddedEvent.observe(thisActivity, Observer { elementNumber ->
-                    elementNumber?.let {
-                        edgesRecyclerViewAdapter.notifyItemInserted(elementNumber)
-                        rvGraphPoints.scrollToPosition(elementNumber)
-                        btnFindShortestWay.apply {
-                            if (edgesRecyclerViewAdapter.itemCount > 1) {
-                                visibility = View.VISIBLE
-                            }
+            elementAddedEvent.observe(thisActivity, Observer { elementNumber ->
+                elementNumber?.let {
+                    edgesRecyclerViewAdapter.notifyItemInserted(elementNumber)
+                    rvGraphPoints.scrollToPosition(elementNumber)
+                    btnSelectPoints.apply {
+                        if (edgesRecyclerViewAdapter.itemCount > 1) {
+                            visibility = View.VISIBLE
                         }
-
-                        elementAddedEvent.postValue(null)
                     }
-                })
+
+                    elementAddedEvent.postValue(null)
+                }
             })
         }
     }
 
     private fun setListeners() {
         btnAddGraphPoint.setOnClickListener(AddEdgeBtnListener())
+        btnSelectPoints.setOnClickListener {
+            val initSpinner = { picker: NumberPicker ->
+                picker.apply {
+                    minValue = 0
+                    maxValue = viewModel.getPointsCount() - 1 // Inclusive
+                    displayedValues = viewModel.getPointsNames().toTypedArray()
+                }
+            }
+
+            initSpinner(npFirstPoint)
+            initSpinner(npSecondPoint)
+            hideKeyboard()
+            vfRootView.displayedChild = 1
+        }
+
+        btnFindShortestWay.setOnClickListener {
+            val point1 = viewModel.getPoint(npFirstPoint.value)
+            val point2 = viewModel.getPoint(npSecondPoint.value)
+            if (point1 == point2) {
+                longToast("Выберите разные вершины")
+                return@setOnClickListener
+            }
+
+            val way = viewModel.findShortestWay(point1, point2)
+            if (way == null) {
+                longToast("Пути между вершинами нет")
+                return@setOnClickListener
+            }
+
+            tvShortestWayHeader.text = getString(R.string.shortest_way_from_X_to_X, point1.name, point2.name)
+            tvShortestWay.text = way
+            vfRootView.displayedChild = 2
+        }
     }
 
     private fun initRecyclerView() {
@@ -111,17 +141,7 @@ class MainActivity : AppCompatActivity() {
             val x2 = etX2.text.toString().toInt()
             val y2 = etY2.text.toString().toInt()
 
-            val point1Name = viewModel.getPointName(x1, y1)
-            val point2Name = viewModel.getPointName(x2, y2)
-            val point1 = GraphPoint(x1, y1, point1Name)
-            val point2 = GraphPoint(x2, y2, point2Name)
-            val distance = sqrt(
-                (x1 - x2).toDouble().pow(2)
-                   + (y1 - y2).toDouble().pow(2)
-            )
-
-            val edge = Edge(point1, point2, distance)
-            viewModel.addEdge(edge)
+            viewModel.addEdge(x1, y1, x2, y2)
         }
     }
 }

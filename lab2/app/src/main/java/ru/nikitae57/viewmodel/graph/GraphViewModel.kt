@@ -3,49 +3,59 @@ package ru.nikitae57.viewmodel.graph
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import ru.nikitae57.model.AStar
 import ru.nikitae57.model.Edge
 import ru.nikitae57.model.GraphPoint
 import ru.nikitae57.view.longToast
+import java.lang.IllegalStateException
 import java.lang.StringBuilder
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class GraphViewModel(private val app: Application) : AndroidViewModel(app) {
-    private val connectedPoints = HashMap<GraphPoint, MutableList<GraphPoint>>()
-
-    val graphLiveData = MutableLiveData<MutableList<Edge>>()
     val elementAddedEvent = MutableLiveData<Int>()
+    val edges = mutableListOf<Edge>()
+    private val graph = sortedSetOf<GraphPoint>()
 
-    init { graphLiveData.postValue(mutableListOf()) }
-    fun addEdge(edge: Edge) {
+    fun getPointsCount() = graph.size
+    fun getPointsNames() = graph.map { it.name }
+    fun getPoint(index: Int) = graph.elementAt(index)
+
+    fun addEdge(x1: Int, y1: Int, x2: Int, y2: Int) {
+        val point1Name = getPointName(x1, y1)
+        val point2Name = getPointName(x2, y2)
+        var point1 = GraphPoint(x1, y1, point1Name)
+        var point2 = GraphPoint(x2, y2, point2Name)
+
+        point1 = graph.find { it == point1 } ?: point1
+        point2 = graph.find { it == point2 } ?: point2
+
+        point1.neighbours.add(point2)
+        point2.neighbours.add(point1)
+        graph.addAll(listOf(point1, point2))
+
+        val distance = sqrt(
+            (x1 - x2).toDouble().pow(2)
+                + (y1 - y2).toDouble().pow(2)
+        )
+
+        val edge = Edge(point1, point2, distance)
 
         // Already has this edge
-        if (edge in graphLiveData.value!!
-            || edge.reversed() in graphLiveData.value!!
-        ) {
+        if (edge in edges || edge.reversed() in edges) {
             app.longToast("Уже есть такое ребро")
             return
         }
+        edges.add(edge)
 
-        edge.run {
-            if (connectedPoints[point1] == null) {
-                connectedPoints[point1] = mutableListOf(point2)
-            } else {
-                connectedPoints[point1]!!.add(point2)
-            }
-
-            if (connectedPoints[point2] == null) {
-                connectedPoints[point2] = mutableListOf(point1)
-            } else {
-                connectedPoints[point2]!!.add(point1)
-            }
-        }
-
-        graphLiveData.value!!.add(edge)
-        elementAddedEvent.postValue(graphLiveData.value!!.size - 1)
+        graph.add(edge.point1)
+        graph.add(edge.point2)
+        elementAddedEvent.postValue(edges.size - 1)
     }
 
     private fun getAlreadyExistingPointName(x: Int, y: Int): String? {
         var existingName: String? = null
-        for (edge in graphLiveData.value!!) {
+        for (edge in edges) {
             edge.run {
                 if (point1.x == x && point1.y == y) {
                     existingName = point1.name
@@ -72,6 +82,7 @@ class GraphViewModel(private val app: Application) : AndroidViewModel(app) {
         '8' to 'I',
         '9' to 'J'
     )
+
     private var nameCount = 0
     fun getPointName(x: Int, y: Int): String {
         // Check if point already exist
@@ -88,5 +99,17 @@ class GraphViewModel(private val app: Application) : AndroidViewModel(app) {
         nameCount++
 
         return stringBuilder.toString()
+    }
+
+    fun findShortestWay(from: GraphPoint, to: GraphPoint): String? {
+        val path = try {
+            AStar.findPath(from, to)
+        } catch (ex: IllegalStateException) {
+            null
+        }
+
+        return path
+            ?.map { point -> point.name }
+            ?.joinToString(separator = " -> ") { name -> name }
     }
 }

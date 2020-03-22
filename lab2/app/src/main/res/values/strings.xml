@@ -10,4 +10,8 @@
     <string name="edge_item_distance_int">dst: %1$d</string>
     <string name="distance">Расстояние</string>
     <string name="find_shortest_way">Найти кратчайший путь</string>
+    <string name="choose_points">Выбрать вершины</string>
+    <string name="first_point">Первая точка</string>
+    <string name="second_point">Вторая точка</string>
+    <string name="shortest_way_from_X_to_X">Кратчайший путь из %s в %s</string>
 </resources>
