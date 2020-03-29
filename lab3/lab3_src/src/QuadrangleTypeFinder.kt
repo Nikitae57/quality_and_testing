@@ -10,13 +10,12 @@ class QuadrangleTypeFinder {
                 && !linePair2.first.isParallelTo(linePair2.second)
             ) {
                 QuadrangleTypes.GENERAL_QUADRANGLE
-            } else if (
+            } else if ( // Трапеция
                 linePair1.first.isParallelTo(linePair1.second)
                 && !linePair2.first.isParallelTo(linePair2.second)
                 || linePair2.first.isParallelTo(linePair2.second)
-                && !linePair1.first.isParallelTo(linePair1.second)
+                && !linePair1 .first.isParallelTo(linePair1.second)
             ) {
-                // Трапеция
                 if (linePair1.first.length() == linePair1.second.length()
                     || linePair2.first.length() == linePair2.second.length()
                 ) {
@@ -34,7 +33,8 @@ class QuadrangleTypeFinder {
                 }
             } else if (quad.straightAnglesCount() == 4) {
                 QuadrangleTypes.RECTANGLE
-            } else if (quad.parallelLinesCount() == 4) {
+            } else if (linePair1.first.isParallelTo(linePair1.second)
+                && linePair2.first.isParallelTo(linePair2.second)) {
                 QuadrangleTypes.PARALLELOGRAM
             } else {
                 null
