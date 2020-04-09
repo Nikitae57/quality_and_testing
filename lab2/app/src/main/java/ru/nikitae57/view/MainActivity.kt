@@ -23,9 +23,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setIcon(R.drawable.ic_star_yellow_24dp)
+
         initViewModel()
         setListeners()
-        initRecyclerView()
+        initRecyclerViews()
     }
 
     private fun initViewModel() {
@@ -42,13 +46,35 @@ class MainActivity : AppCompatActivity() {
                     edgesRecyclerViewAdapter.notifyItemInserted(elementNumber)
                     rvGraphPoints.scrollToPosition(elementNumber)
                     btnSelectPoints.apply {
-                        if (edgesRecyclerViewAdapter.itemCount > 1) {
+                        if (edgesRecyclerViewAdapter.itemCount > 0) {
                             visibility = View.VISIBLE
                         }
                     }
 
                     elementAddedEvent.postValue(null)
                 }
+            })
+
+            shortestWayLiveData.observe(thisActivity, Observer { path ->
+                kotlin.run {
+                    val point1 = viewModel.getPoint(npFirstPoint.value)
+                    val point2 = viewModel.getPoint(npSecondPoint.value)
+
+                    tvShortestWayHeader.text = if (path == null) {
+                        getString(R.string.way_from_X_to_X_not_found, point1.name, point2.name)
+                    } else {
+                        getString(R.string.shortest_way_from_X_to_X, point1.name, point2.name)
+                    }
+                }
+
+                path?.let {
+                    rvPath.apply {
+                        adapter = PathPointsAdapter(path)
+                        layoutManager = LinearLayoutManager(thisActivity)
+                    }
+                }
+
+                vfRootView.displayedChild = 2
             })
         }
     }
@@ -78,19 +104,11 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val way = viewModel.findShortestWay(point1, point2)
-            if (way == null) {
-                longToast("Пути между вершинами нет")
-                return@setOnClickListener
-            }
-
-            tvShortestWayHeader.text = getString(R.string.shortest_way_from_X_to_X, point1.name, point2.name)
-            tvShortestWay.text = way
-            vfRootView.displayedChild = 2
+            viewModel.findShortestWay(point1, point2)
         }
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerViews() {
         rvGraphPoints.layoutManager = LinearLayoutManager(this)
     }
 

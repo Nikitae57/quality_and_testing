@@ -14,6 +14,8 @@ import kotlin.math.sqrt
 
 class GraphViewModel(private val app: Application) : AndroidViewModel(app) {
     val elementAddedEvent = MutableLiveData<Int>()
+    val shortestWayLiveData = MutableLiveData<List<GraphPoint>?>()
+
     val edges = mutableListOf<Edge>()
     private val graph = sortedSetOf<GraphPoint>()
 
@@ -101,15 +103,13 @@ class GraphViewModel(private val app: Application) : AndroidViewModel(app) {
         return stringBuilder.toString()
     }
 
-    fun findShortestWay(from: GraphPoint, to: GraphPoint): String? {
+    fun findShortestWay(from: GraphPoint, to: GraphPoint) {
         val path = try {
             AStar.findPath(from, to)
         } catch (ex: IllegalStateException) {
             null
         }
 
-        return path
-            ?.map { point -> point.name }
-            ?.joinToString(separator = " -> ") { name -> name }
+        shortestWayLiveData.postValue(path)
     }
 }

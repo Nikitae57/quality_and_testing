@@ -3,7 +3,7 @@ import kotlin.test.assertEquals
 
 class QuadrangleTypeFinderProperTest {
     @Test
-    fun `Both pairs of are not parallel`() {
+    fun `Both pairs are not parallel`() {
         val generalQuadrangle = Quadrangle(
             Point(0, 0), Point(5, 2), Point(9, 3), Point(1, -2)
         )

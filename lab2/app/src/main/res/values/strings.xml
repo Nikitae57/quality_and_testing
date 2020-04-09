@@ -4,7 +4,7 @@
     <string name="x">X</string>
     <string name="x2">X2</string>
     <string name="y2">Y2</string>
-    <string name="add_point">Добавить вершину</string>
+    <string name="add_edge">Добавить грань</string>
     <string name="edge_item_coords">%1$s(x: %2$d; y: %3$d)</string>
     <string name="edge_item_distance_double">dst: %1$.2f</string>
     <string name="edge_item_distance_int">dst: %1$d</string>
@@ -14,4 +14,5 @@
     <string name="first_point">Первая точка</string>
     <string name="second_point">Вторая точка</string>
     <string name="shortest_way_from_X_to_X">Кратчайший путь из %s в %s</string>
+    <string name="way_from_X_to_X_not_found">Путь из %s в %s не найден</string>
 </resources>

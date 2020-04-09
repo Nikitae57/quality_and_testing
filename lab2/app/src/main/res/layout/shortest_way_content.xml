@@ -18,22 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Кратчайший путь из A в B"/>
 
-    <ScrollView
-        android:id="@+id/svShortestWay"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPath"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvShortestWayHeader"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/tvShortestWay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            tools:text="A -> C -> B" />
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@id/tvShortestWayHeader"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/path_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>
