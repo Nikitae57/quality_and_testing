@@ -72,15 +72,23 @@ class MainActivity : AppCompatActivity() {
                         adapter = PathPointsAdapter(path)
                         layoutManager = LinearLayoutManager(thisActivity)
                     }
+                    rvPath.visibility = View.VISIBLE
                 }
 
                 vfRootView.displayedChild = 2
+            })
+
+            enteredExistingEdgeLiveData.observe(thisActivity, Observer {
+                if (it != null && it) {
+                    longToast(getString(R.string.already_have_this_edge))
+                    enteredExistingEdgeLiveData.postValue(null)
+                }
             })
         }
     }
 
     private fun setListeners() {
-        btnAddGraphPoint.setOnClickListener(AddEdgeBtnListener())
+        btnAddGraphEdge.setOnClickListener(AddEdgeBtnListener())
         btnSelectPoints.setOnClickListener {
             val initSpinner = { picker: NumberPicker ->
                 picker.apply {
@@ -100,7 +108,7 @@ class MainActivity : AppCompatActivity() {
             val point1 = viewModel.getPoint(npFirstPoint.value)
             val point2 = viewModel.getPoint(npSecondPoint.value)
             if (point1 == point2) {
-                longToast("Выберите разные вершины")
+                longToast(getString(R.string.choose_different_points))
                 return@setOnClickListener
             }
 
@@ -126,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 
             val emptyFields = inputFields.filter { it?.text.isNullOrEmpty() }
             if (emptyFields.isNotEmpty()) {
-                emptyFields.forEach { it.error = "Ввдите значение" }
+                emptyFields.forEach { it.error = getString(R.string.enter_value) }
                 isAllValid = false
             }
 
@@ -140,7 +148,7 @@ class MainActivity : AppCompatActivity() {
                 if (x1 == x2 && y1 == y2) {
                     etX1.requestFocus()
                     isAllValid = false
-                    etX1.error = "Введиет разные вершины"
+                    etX1.error = getString(R.string.enter_different_points)
                 }
             }
             try {

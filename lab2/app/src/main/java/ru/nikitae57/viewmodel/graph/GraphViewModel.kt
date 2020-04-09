@@ -15,6 +15,7 @@ import kotlin.math.sqrt
 class GraphViewModel(private val app: Application) : AndroidViewModel(app) {
     val elementAddedEvent = MutableLiveData<Int>()
     val shortestWayLiveData = MutableLiveData<List<GraphPoint>?>()
+    val enteredExistingEdgeLiveData = MutableLiveData<Boolean>()
 
     val edges = mutableListOf<Edge>()
     private val graph = sortedSetOf<GraphPoint>()
@@ -36,16 +37,11 @@ class GraphViewModel(private val app: Application) : AndroidViewModel(app) {
         point2.neighbours.add(point1)
         graph.addAll(listOf(point1, point2))
 
-        val distance = sqrt(
-            (x1 - x2).toDouble().pow(2)
-                + (y1 - y2).toDouble().pow(2)
-        )
-
-        val edge = Edge(point1, point2, distance)
+        val edge = Edge(point1, point2)
 
         // Already has this edge
         if (edge in edges || edge.reversed() in edges) {
-            app.longToast("Уже есть такое ребро")
+            enteredExistingEdgeLiveData.postValue(true)
             return
         }
         edges.add(edge)

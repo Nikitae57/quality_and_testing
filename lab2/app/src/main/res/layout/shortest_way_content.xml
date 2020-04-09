@@ -23,9 +23,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvShortestWayHeader"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/path_item" />
+        tools:listitem="@layout/path_item"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

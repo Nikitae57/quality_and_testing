@@ -16,6 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilX1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -31,6 +32,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilY1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -57,6 +59,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilX2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -71,6 +74,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilY2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
@@ -86,7 +90,7 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAddGraphPoint"
+        android:id="@+id/btnAddGraphEdge"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -108,7 +112,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnSelectPoints"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnAddGraphPoint"
+        app:layout_constraintTop_toBottomOf="@id/btnAddGraphEdge"
         tools:listitem="@layout/graph_edge_item" />
 
     <com.google.android.material.button.MaterialButton

@@ -15,4 +15,8 @@
     <string name="second_point">Вторая точка</string>
     <string name="shortest_way_from_X_to_X">Кратчайший путь из %s в %s</string>
     <string name="way_from_X_to_X_not_found">Путь из %s в %s не найден</string>
+    <string name="enter_different_points">Введиет разные вершины</string>
+    <string name="enter_value">Ввдите значение</string>
+    <string name="choose_different_points">Выберите разные вершины</string>
+    <string name="already_have_this_edge">Уже есть такое ребро</string>
 </resources>
