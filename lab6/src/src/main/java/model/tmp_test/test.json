@@ -1,0 +1,34 @@
+[
+  {
+    "className": "model.tmp_test.src.Test1Kt",
+    "functionName": "doStuff"
+  },
+  {
+    "className": "model.tmp_test.src.Test1Kt",
+    "functionName": "doStuff2"
+  },
+  {
+    "className": "model.tmp_test.src.Test1Kt",
+    "functionName": "doStuff3"
+  },
+  {
+    "className": "model.tmp_test.src.Test1Kt",
+    "functionName": "doStuff4"
+  },
+  {
+    "className": "model.tmp_test.src.Test1Kt",
+    "functionName": "doStuff5",
+    "expectedValue": ["2", "int"]
+  },
+  {
+    "className": "model.tmp_test.src.Test1Kt",
+    "functionName": "doStuff6",
+    "expectedValue": ["2", "int"]
+  },
+  {
+    "className": "model.tmp_test.src.Test1Kt",
+    "functionName": "doStuff7",
+    "parametersToTypes": [["1", "int"]],
+    "expectedValue": ["1", "int"]
+  }
+]
